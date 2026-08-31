@@ -24,5 +24,6 @@ while patientID == "":
 # Display patient details
 print("Patient name:", name)
 print("Patient age:", age)
+
 print("Patient ID:", patientID)
 print("Patient added successfully")
