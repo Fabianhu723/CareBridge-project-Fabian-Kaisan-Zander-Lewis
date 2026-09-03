@@ -1,0 +1,158 @@
+from datetime import datetime, date, timedelta
+
+
+# FUNCTION 1 - ADD PATIENT
+def add_patient():
+
+    name = input("Enter patient name: ")
+
+    while name == "":
+        print("Invalid name")
+        name = input("Enter patient name again: ")
+
+    age = input("Enter patient age: ")
+
+    while not age.isdigit() or int(age) <= 0:
+        print("Invalid age")
+        age = input("Enter patient age again: ")
+
+    age = int(age)
+
+    patientID = input("Enter patient ID: ")
+
+    while patientID == "":
+        print("Invalid ID")
+        patientID = input("Enter patient ID again: ")
+
+    print("Patient name:", name)
+    print("Patient age:", age)
+    print("Patient ID:", patientID)
+    print("Patient added successfully")
+
+
+# FUNCTION 2 - BOOK APPOINTMENT
+def book_appointment():
+
+    while True:
+
+        department = input("Choose department (GP or Specialist): ")
+        appointment_date = input("Enter date (DD/MM/YYYY): ")
+
+        if department not in ["GP", "Specialist"]:
+            print("Error: Invalid department or date.")
+            print("Please choose the department and date again.")
+
+        else:
+            try:
+                entered_date = datetime.strptime(
+                    appointment_date, "%d/%m/%Y"
+                ).date()
+
+                today = date.today()
+                maximum_date = today + timedelta(days=7)
+
+                if entered_date <= today or entered_date > maximum_date:
+                    print("Error: Appointment date must be within the next 7 days.")
+
+                else:
+                    print("Do you wish to confirm the purchase?")
+                    confirmation = input("Enter Yes or No: ")
+
+                    if confirmation == "Yes":
+                        print("Purchase confirmed.")
+                        break
+
+            except ValueError:
+                print("Error: Invalid date.")
+
+
+# FUNCTION 3 - CALCULATE BILL
+def calculate_bill():
+
+    BASE_FEE = 100
+    LAB_TEST_RATE = 10
+
+    patientType = input("Enter patient type (Subsidised / Private): ")
+
+    while patientType not in ("Subsidised", "Private"):
+        print("Invalid patient type")
+        patientType = input("Enter patient type again: ")
+
+    while True:
+        try:
+            labTests = int(input("Enter number of lab tests completed: "))
+            break
+        except ValueError:
+            print("Invalid number of lab tests")
+
+    subtotal = BASE_FEE + (labTests * LAB_TEST_RATE)
+
+    if patientType == "Subsidised":
+        total = subtotal * 0.70
+    else:
+        total = subtotal
+
+    print("Patient type:", patientType)
+    print("Total amount to pay: $", format(total, ".2f"))
+
+
+# FUNCTION 4 - TRIAGE PATIENT
+def assign_triage_room():
+
+    while True:
+        try:
+            severity = int(input("Enter severity condition (1 to 10): "))
+
+            if severity < 1 or severity > 10:
+                print("Invalid input, please enter a whole number from 1 to 10.")
+                continue
+
+            break
+
+        except ValueError:
+            print("Invalid input, please enter a whole number from 1 to 10.")
+
+    if 1 <= severity <= 4:
+        room = "Waiting Room"
+
+    elif 5 <= severity <= 7:
+        room = "Room 1"
+
+    else:
+        room = "Room 2"
+
+    print("\nTriage Summary")
+    print("Severity Level:", severity)
+    print("Assigned Room:", room)
+
+
+# MAIN MENU
+while True:
+
+    print("\n===== CareBridge Main Menu =====")
+    print("1. Add Patient")
+    print("2. Book Appointment")
+    print("3. Calculate Bill")
+    print("4. Triage Patient")
+    print("5. Exit")
+
+    choice = input("Enter your choice (1-5): ")
+
+    if choice == "1":
+        add_patient()
+
+    elif choice == "2":
+        book_appointment()
+
+    elif choice == "3":
+        calculate_bill()
+
+    elif choice == "4":
+        assign_triage_room()
+
+    elif choice == "5":
+        print("Exiting CareBridge.")
+        break
+
+    else:
+        print("Invalid choice. Please enter a number from 1 to 5.")
